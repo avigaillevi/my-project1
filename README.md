@@ -1,16 +1,62 @@
-# React + Vite
+# Product Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite product store application with product details, cart, search, and responsive design and API.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Product list
+- Add product
+- Product details page
+- Cart page
+- Add to cart
+- Search products
+- Responsive design
+- Routing with React Router
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React
+- Vite
+- TailwindCSS
+- Axios
+- React Router
+
+---
+
+## Installation
+
+```bash
+npm install
+```
+
+---
+
+## Run Project
+
+```bash
+npm run dev
+```
+
+---
+
+## Screenshots
+
+### Home Page
+
+![Home](./screenshots/home.png)
+
+### Product Details
+
+![Details](./screenshots/details.png)
+
+### Cart
+
+![Cart](./screenshots/cart.png)
+
+### Add Product
+
+![Cart](./screenshots/addproduct.png)
