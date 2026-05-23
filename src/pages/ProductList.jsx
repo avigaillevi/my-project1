@@ -8,6 +8,7 @@ import { searchText } from "../services/apirequest";
 export default function ProductList() {
   const [productsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -18,25 +19,30 @@ export default function ProductList() {
         setProductsData(data.products);
       })
       .catch((error) => {
-        console.error("Error fetching products:", error);
-        alert("Error fetching products. Please try again.");
+        setError(
+          "Error fetching products. Please try again. the error is " +
+            error.message,
+        );
       })
       .finally(() => {
         setLoading(false);
       });
   }, []);
 
-  function handleadd() {
+  function navigateToNewProduct() {
     navigate("/products/add");
   }
-  function handlesearch() {
+  function handleSearchSubmit() {
     searchText(searchQuery)
       .then((data) => {
         setProductsData(data.products);
       })
       .catch((error) => {
         console.error("Error searching products:", error);
-        alert("Error searching products. Please try again.");
+        setError(
+          "Error searching products. Please try again. the error is " +
+            error.message,
+        );
       });
   }
   function handleaddtocart() {
@@ -48,6 +54,14 @@ export default function ProductList() {
         <h1 className="text-2xl md:text-3xl font-bold text-indigo-700 m-auto">
           Product List
         </h1>
+        {error && (
+          <p
+            role="alert"
+            className="text-center text-lg font-semibold text-red-500 mt-6"
+          >
+            {error}
+          </p>
+        )}
         <button
           onClick={handleaddtocart}
           className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -65,14 +79,14 @@ export default function ProductList() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
           <button
-            onClick={handlesearch}
-            className="w-full sm: w-auto ml-2 p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            onClick={handleSearchSubmit}
+            className="w-full sm:w-auto ml-2 p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Search
           </button>
         </div>
         <button
-          onClick={handleadd}
+          onClick={navigateToNewProduct}
           className="w-full sm:w-full md:w-auto p-2 px-5 rounded-full border-4  bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           + add product
@@ -80,17 +94,19 @@ export default function ProductList() {
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         {loading ? (
-          <p>Loading products...</p>
-        ) : productsData ? (
+          <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
+            Loading...
+          </p>
+        ) : !loading && productsData.length === 0 ? (
+          <p>No products found</p>
+        ) : (
           productsData.map((product) => (
             <Product
               key={product.id}
               product={product}
-              dontshowaddcartbutton={false}
+              showAddToCartButton={true}
             />
           ))
-        ) : (
-          <p>No products...</p>
         )}
       </div>
     </div>

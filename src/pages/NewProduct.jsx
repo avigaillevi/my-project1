@@ -1,14 +1,18 @@
 import { postProduct } from "../services/apirequest";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export default function NewProduct() {
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState("");
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+
   function handlePost(event) {
     event.preventDefault();
-    const title = document.getElementById("title").value;
-    const description = document.getElementById("description").value;
-    const price = document.getElementById("price").value;
 
     const productData = {
       title,
@@ -18,12 +22,16 @@ export default function NewProduct() {
 
     postProduct(productData)
       .then((id) => {
-        alert("Product added successfully!"); // Show a success message to the user
-        navigate(`/products/${id}`); // Navigate to the product details page for the newly added product
+        setMessage("Product added successfully!");
+        setTimeout(() => {
+          navigate(`/products/${id - 1}`);
+        }, 1000);
       })
       .catch((error) => {
-        console.error("Error adding product:", error);
-        alert("Error adding product. Please try again.");
+        setMessage(
+          "Error adding product. Please try again. the error is " +
+            error.message,
+        );
       });
   }
 
@@ -32,7 +40,15 @@ export default function NewProduct() {
       <h1 className="text-sm md:text-3xl font-bold mb-6 text-indigo-700 m-auto text-center">
         Add New Product
       </h1>
-      <form className="bg-white border-4 border-indigo-500/75 shadow-md p-6 rounded-xl">
+      {message && (
+        <p className="mt-4 text-center text-lg font-semibold text-indigo-700">
+          {message}
+        </p>
+      )}
+      <form
+        onSubmit={handlePost}
+        className="bg-white border-4 border-indigo-500/75 shadow-md p-6 rounded-xl"
+      >
         <div className="mb-4">
           <label
             className="block text-gray-700 text-sm font-bold mb-2"
@@ -45,6 +61,8 @@ export default function NewProduct() {
             id="title"
             type="text"
             placeholder="Product Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </div>
         <div className="mb-4">
@@ -58,6 +76,8 @@ export default function NewProduct() {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
             placeholder="Product Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           ></textarea>
         </div>
         <div className="mb-4">
@@ -72,10 +92,11 @@ export default function NewProduct() {
             id="price"
             type="number"
             placeholder="Product Price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
 
           <button
-            onClick={handlePost}
             type="submit"
             className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 mt-4"
           >

@@ -3,15 +3,22 @@ import { getCart } from "../services/apirequest";
 import Product from "../components/Product";
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     getCart()
       .then((data) => {
-        setCartItems(data.products);
+        setCartItems(data.products ?? []);
       })
       .catch((error) => {
-        console.error("Error fetching cart items:", error);
-        alert("Error fetching cart items. Please try again.");
+        setError(
+          "Error fetching cart items. Please try again. the error is " +
+            error.message,
+        );
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -20,17 +27,31 @@ export default function Cart() {
       <h1 className="text-3xl font-bold text-center text-indigo-700 mb-5">
         Cart
       </h1>
-
-      <ul className="space-y-4">
-        {cartItems.map((item) => (
-          <div
-            key={item.id}
-            className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200"
-          >
-            <Product product={item} dontshowaddcartbutton={true} />
-          </div>
-        ))}
-      </ul>
+      {error ? (
+        <p role="alert" className="text-center text-lg font-semibold text-red-500 mt-6">
+          {error}
+        </p>
+      ) : null}
+      {loading ? (
+        <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
+          Loading...
+        </p>
+      ) : cartItems.length === 0 ? (
+        <p className="text-center text-2xl font-semibold text-indigo-600">
+          Your cart is empty. Please add some products to your cart.
+        </p>
+      ) : (
+        <ul className="space-y-4">
+          {cartItems.map((item) => (
+            <div
+              key={item.id}
+              className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200"
+            >
+              <Product product={item} showAddToCartButton ={false} />
+            </div>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

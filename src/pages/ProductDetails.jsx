@@ -3,8 +3,9 @@ import { useEffect, useState } from "react";
 import { getProduct } from "../services/apirequest";
 
 export default function ProductDetails() {
-  let params = useParams();
-  const productId = params.id;
+  const { id: productId } = useParams();
+
+  const [error, setError] = useState("");
 
   const [productData, setProductData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -15,8 +16,7 @@ export default function ProductDetails() {
         setProductData(data);
       })
       .catch((error) => {
-        console.error("Error fetching product details:", error);
-        alert("Error fetching product details. Please try again.");
+        setError("Error fetching product details. Please try again. the error is " + error.message);
       })
       .finally(() => {
         setLoading(false);
@@ -97,6 +97,11 @@ export default function ProductDetails() {
       ) : (
         <p className="text-center text-2xl font-semibold text-red-500">
           Product not found.
+        </p>
+      )}
+      {error && (
+        <p role="alert" className="text-center text-lg font-semibold text-red-500 mb-6">
+          {error}
         </p>
       )}
     </div>

@@ -1,22 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { addToCart } from "../services/apirequest";
+import { useState } from "react";
 
-export default function Product({ product, dontshowaddcartbutton }) {
+export default function Product({ product, showAddToCartButton  }) {
   const navigate = useNavigate();
+
+  const [error, setError] = useState("");
 
   function handleShowProduct() {
     navigate(`/products/${product.id}`);
   }
 
   function handleAddToCart() {
-    addToCart() //network call
-      .then((data) => {
-        alert(`Product ${data.title} added to cart successfully!`); // Show a success message to the user
-        navigate("/cart");
+    addToCart(product.id) //network call
+      .then(() => {
+        navigate("/cart", { state: { message: `Product ${product.title} added to cart successfully!` } });
       })
-      .catch((error) => {
-        console.error("Error adding product to cart:", error);
-        alert("Error adding product to cart. Please try again.");
+      .catch(() => {
+        setError("Error adding product to cart. Please try again.");
       });
   }
 
@@ -37,7 +38,7 @@ export default function Product({ product, dontshowaddcartbutton }) {
       >
         Show Product
       </button>
-      {!dontshowaddcartbutton ? (
+      {showAddToCartButton  ? (
         <button
           onClick={handleAddToCart}
           className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -46,6 +47,11 @@ export default function Product({ product, dontshowaddcartbutton }) {
         </button>
       ) : (
         <></>
+      )}
+      {error && (
+        <p role="alert" className="text-center text-lg font-semibold text-red-500 mt-6">
+          {error}
+        </p>
       )}
     </div>
   );

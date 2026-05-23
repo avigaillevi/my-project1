@@ -12,7 +12,7 @@ export async function getProduct(id) {
   return response.data;
 }
 
-export async function postProduct(productData) { 
+export async function postProduct(productData) {
   const response = await axios.post(
     "https://dummyjson.com/products/add",
     productData,
@@ -21,14 +21,14 @@ export async function postProduct(productData) {
 }
 
 export async function searchText(query) {
-  const response = await axios.get(`https://dummyjson.com/products/search?q=${query}`);
-  console.log("Search response:", response.data);
+  const response = await axios.get(
+    `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}`,
+  );
   return response.data;
 }
 
 export async function getCart() {
   const response = await axios.get("https://dummyjson.com/carts/1");
-  console.log("Cart response:", response.data);
   return response.data;
 }
 
