@@ -1,6 +1,6 @@
 # Product Store
 
-React + Vite product store application with product details, cart, search, and responsive design and API.
+Product Store is a React + Vite frontend that fetches products from a public API, lets users search items, view details, and add products to a cart.
 
 ---
 
@@ -43,6 +43,13 @@ npm run dev
 
 ---
 
+## Project structure
+- `src/pages/` - full screens
+- `src/components/` - reusable UI pieces
+- `src/services/` - API calls
+
+---
+  
 ## Screenshots
 
 ### Home Page
@@ -59,4 +66,4 @@ npm run dev
 
 ### Add Product
 
-![Cart](./screenshots/addproduct.png)
+![Add Product](./screenshots/addproduct.png)
