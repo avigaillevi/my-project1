@@ -11,6 +11,7 @@ export default function NewProduct() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
 
+
   function handlePost(event) {
     event.preventDefault();
 
@@ -19,7 +20,11 @@ export default function NewProduct() {
       description,
       price : Number(price),
     };
-
+  const numericPrice = Number(price);
+  if (!price || isNaN(numericPrice) || numericPrice <= 0) {
+    setMessage("Price must be a positive number");
+    return;
+  }
     postProduct(productData)
       .then((id) => {
         setMessage("Product added successfully!");
