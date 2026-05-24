@@ -1,20 +1,19 @@
-//import React from 'react';
-import { products } from "../services/apirequest";
+import { fetchProducts, searchProductsByQuery } from "../services/apirequest";
 import Product from "../components/Product";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { searchText } from "../services/apirequest";
 
 export default function ProductList() {
   const [productsData, setProductsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [searchLoading, setSearchLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
   useEffect(() => {
-    products() //network call
+    const respose = fetchProducts(); //network call
+    respose
       .then((data) => {
         setProductsData(data.products);
       })
@@ -32,20 +31,23 @@ export default function ProductList() {
   function navigateToNewProduct() {
     navigate("/products/add");
   }
-  function handleSearchSubmit() {
-    searchText(searchQuery)
-      .then((data) => {
-        setProductsData(data.products);
-      })
-      .catch((error) => {
-        console.error("Error searching products:", error);
-        setError(
-          "Error searching products. Please try again. the error is " +
-            error.message,
-        );
-      });
+  async function handleSearchSubmit() {
+    if (!searchQuery.trim()) {
+      setError("Please enter a valid search term.");
+      return;
+    }
+    setError("");
+    setSearchLoading(true);
+    try {
+      const data = await searchProductsByQuery(searchQuery);
+      setProductsData(data.products);
+    } catch (error) {
+      setError(error.message || "Error searching products.");
+    } finally {
+      setSearchLoading(false);
+    }
   }
-  function handleaddtocart() {
+  function handleCartClick() {
     navigate("/cart");
   }
   return (
@@ -54,16 +56,16 @@ export default function ProductList() {
         <h1 className="text-2xl md:text-3xl font-bold text-indigo-700 m-auto">
           Product List
         </h1>
-        {error && (
+        {error ? (
           <p
             role="alert"
             className="text-center text-lg font-semibold text-red-500 mt-6"
           >
             {error}
           </p>
-        )}
+        ) : null}
         <button
-          onClick={handleaddtocart}
+          onClick={handleCartClick}
           className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           Cart
@@ -76,7 +78,27 @@ export default function ProductList() {
             placeholder="Search..."
             className="ml-2 p-2 rounded-full border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={async (e) => {
+              setSearchQuery(e.target.value);
+              const value = e.target.value;
+
+              setSearchQuery(value);
+              setError("");
+
+              if (!value.trim()) {
+                setSearchLoading(true);
+
+                try {
+                  const data = await fetchProducts();
+
+                  setProductsData(data.products);
+                } catch (error) {
+                  setError(error.message || "Error fetching products.");
+                } finally {
+                  setSearchLoading(false);
+                }
+              }
+            }}
           />
           <button
             onClick={handleSearchSubmit}
@@ -93,7 +115,7 @@ export default function ProductList() {
         </button>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
-        {loading ? (
+        {loading || searchLoading ? (
           <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
             Loading...
           </p>

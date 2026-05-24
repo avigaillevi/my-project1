@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export async function products() {
+export async function fetchProducts() {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   const response = await axios.get("https://dummyjson.com/products?limit=10");
@@ -20,7 +20,10 @@ export async function postProduct(productData) {
   return response.data.id;
 }
 
-export async function searchText(query) {
+export async function searchProductsByQuery(query) {
+  if (!query.trim()) {
+    return [];
+  }
   const response = await axios.get(
     `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}`,
   );

@@ -17,7 +17,7 @@ export default function NewProduct() {
     const productData = {
       title,
       description,
-      price,
+      price : Number(price),
     };
 
     postProduct(productData)

@@ -46,7 +46,7 @@ export default function Product({ product, showAddToCartButton  }) {
           Add To Cart
         </button>
       ) : (
-        <></>
+        null
       )}
       {error && (
         <p role="alert" className="text-center text-lg font-semibold text-red-500 mt-6">
