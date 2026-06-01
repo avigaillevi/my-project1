@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 
 export default function ProductList() {
+  
   const {
     data: productsData,
     loading,
@@ -17,29 +18,28 @@ export default function ProductList() {
     error: searchError,
   } = useFetch(searchProductsByQuery(searchQuery));
 
-
   const navigate = useNavigate();
+  //const test = undefined;
+//  throw new Error("Test Error Boundary");
 
-  function navigateToNewProduct() {
+  function navigateToNewProduct() {    
     navigate("/products/add");
   }
   function handleCartClick() {
     navigate("/cart");
   }
+  function handleTryAgain() {
+    window.location.reload();
+    navigate("/"); // Navigate to the home page to trigger a re-fetch of products 
+  } 
   return (
     <div className="container mx-auto px-4 py-8">
+      {/* <h1>{test.name}</h1> */}
       <div className="flex flex-col md:flex items-center justify-between mb-6 gap-4">
         <h1 className="text-2xl md:text-3xl font-bold text-indigo-700 m-auto">
           Product List
         </h1>
-        {error || searchError ? (
-          <p
-            role="alert"
-            className="text-center text-lg font-semibold text-red-500 mt-6"
-          >
-            {error || searchError }
-          </p>
-        ) : null}
+
         <button
           onClick={handleCartClick}
           className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -75,8 +75,17 @@ export default function ProductList() {
           <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
             Loading...
           </p>
-        ) : !loading && searchData.products.length === 0 ? (
-          <p>No products found</p>
+        ) : !loading && searchData.products.length === 0 || error || searchError ? (
+          <p role="alert"
+            className="text-center text-lg font-semibold text-red-500 mt-6"
+            >No products found
+            <button 
+              onClick={handleTryAgain}
+              className="ml-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              Try Again
+            </button>
+            </p>
         ) : (
           productsData &&
           searchData.products.map((product) => (

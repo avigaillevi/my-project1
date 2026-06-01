@@ -4,6 +4,7 @@ import ProductList from "./pages/ProductList";
 import NewProduct from "./pages/NewProduct";
 import Cart from "./pages/Cart";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
+import ErrorPage from "./components/ErrorPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/products/add" element={<NewProduct />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/error" element={<ErrorPage />} />
       </Routes>
     </BrowserRouter>
   );

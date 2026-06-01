@@ -30,7 +30,7 @@ export default function NewProduct() {
         setMessage("Product added successfully!");
         setTimeout(() => {
           navigate(`/products/${id - 1}`);
-        }, 1000);
+        }, 10000);
       })
       .catch((error) => {
         setMessage(
@@ -40,6 +40,10 @@ export default function NewProduct() {
       });
   }
 
+    function handleTryAgain() {
+    window.location.reload();
+    navigate("/products/add"); // Navigate to the home page to trigger a re-fetch of products 
+  }
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-sm md:text-3xl font-bold mb-6 text-indigo-700 m-auto text-center">
@@ -48,6 +52,12 @@ export default function NewProduct() {
       {message && (
         <p className="mt-4 text-center text-lg font-semibold text-indigo-700">
           {message}
+          <button
+            onClick={handleTryAgain}
+            className="ml-2 px-4 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
+            Try Again
+          </button>
         </p>
       )}
       <form
