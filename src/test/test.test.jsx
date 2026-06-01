@@ -5,9 +5,12 @@ import axios from "axios";
 import * as api from "../services/apirequest";
 import ProductList from "../pages/ProductList";
 import { MemoryRouter } from "react-router-dom";
+import beforeEach from "vitest";
 
 vi.mock("axios");
-
+beforeEach(() => {
+  axios.get.mockResolvedValue({ data: { products: [] } });
+});
 //check to searchProductsByQuery function when query is empty it should not send request and return empty array
 describe("testSearchProductsByQuery", () => {
   it("should not send request when query is empty", async () => {
@@ -22,6 +25,7 @@ describe("testSearchProductsByQuery", () => {
 //check to productlist function when there is no products it should show empty state
 describe("ProductList", () => {
   it("shows empty state", async () => {
+    
     render(
       <MemoryRouter>
         <ProductList />

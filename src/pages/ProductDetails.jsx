@@ -1,27 +1,12 @@
 import { useParams } from "react-router";
-import { useEffect, useState } from "react";
 import { getProduct } from "../services/apirequest";
+import useFetch from "../hooks/useFetch";
 
 export default function ProductDetails() {
   const { id: productId } = useParams();
 
-  const [error, setError] = useState("");
+  const {data:productData, loading, error} = useFetch(getProduct(productId));
 
-  const [productData, setProductData] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    getProduct(productId) //network call
-      .then((data) => {
-        setProductData(data);
-      })
-      .catch((error) => {
-        setError("Error fetching product details. Please try again. the error is " + error.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [productId]);
 
   return (
     <div className="min-h-[80vh] bg-gradient-to-br from-indigo-100 via-white to-indigo-200 py-10 px-4">

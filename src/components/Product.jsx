@@ -38,16 +38,14 @@ export default function Product({ product, showAddToCartButton  }) {
       >
         Show Product
       </button>
-      {showAddToCartButton  ? (
+      {showAddToCartButton  && (
         <button
           onClick={handleAddToCart}
           className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           Add To Cart
         </button>
-      ) : (
-        null
-      )}
+      ) }
       {error && (
         <p role="alert" className="text-center text-lg font-semibold text-red-500 mt-6">
           {error}

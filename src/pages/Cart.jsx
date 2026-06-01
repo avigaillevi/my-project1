@@ -1,26 +1,11 @@
-import { useState, useEffect } from "react";
+
 import { getCart } from "../services/apirequest";
 import Product from "../components/Product";
-export default function Cart() {
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+import useFetch  from "../hooks/useFetch";
 
-  useEffect(() => {
-    getCart()
-      .then((data) => {
-        setCartItems(data.products ?? []);
-      })
-      .catch((error) => {
-        setError(
-          "Error fetching cart items. Please try again. the error is " +
-            error.message,
-        );
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+export default function Cart() {
+  const {data:cartItems , loading , error} = useFetch(getCart())
+
 
   return (
     <div className=" text-sm md:max-w-md mx-auto mt-8 bg-white border-4 border-indigo-500 rounded-2xl shadow-xl p-5">
@@ -36,13 +21,13 @@ export default function Cart() {
         <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
           Loading...
         </p>
-      ) : cartItems.length === 0 ? (
+      ) : cartItems.products.length === 0 ? (
         <p className="text-center text-2xl font-semibold text-indigo-600">
           Your cart is empty. Please add some products to your cart.
         </p>
       ) : (
         <ul className="space-y-4">
-          {cartItems.map((item) => (
+          {cartItems.products.map((item) => (
             <div
               key={item.id}
               className="bg-indigo-50 border-2 border-indigo-200 rounded-xl p-3 shadow-sm hover:shadow-md transition-all duration-200"

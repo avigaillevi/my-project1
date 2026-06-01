@@ -1,15 +1,13 @@
 import axios from "axios";
 
-export async function fetchProducts() {
-  await new Promise((resolve) => setTimeout(resolve, 500));
+export function fetchProducts() {
+  //await new Promise((resolve) => setTimeout(resolve, 500));
 
-  const response = await axios.get("https://dummyjson.com/products?limit=10");
-  return response.data;
+  return "https://dummyjson.com/products?limit=10";
 }
 
-export async function getProduct(id) {
-  const response = await axios.get(`https://dummyjson.com/products/${id}`);
-  return response.data;
+export function getProduct(id) {
+  return `https://dummyjson.com/products/${id}`;
 }
 
 export async function postProduct(productData) {
@@ -20,19 +18,14 @@ export async function postProduct(productData) {
   return response.data.id;
 }
 
-export async function searchProductsByQuery(query) {
-  if (!query.trim()) {
-    return [];
-  }
-  const response = await axios.get(
-    `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}`,
-  );
-  return response.data;
+export function searchProductsByQuery(query) {
+   (resolve) => setTimeout(resolve, 500);
+
+  return `https://dummyjson.com/products/search?limit=10&q=${encodeURIComponent(query)}`;
 }
 
-export async function getCart() {
-  const response = await axios.get("https://dummyjson.com/carts/1");
-  return response.data;
+export function getCart() {
+  return "https://dummyjson.com/carts/1";
 }
 
 export async function addToCart(productId) {

@@ -1,51 +1,27 @@
 import { fetchProducts, searchProductsByQuery } from "../services/apirequest";
 import Product from "../components/Product";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useFetch from "../hooks/useFetch";
 
 export default function ProductList() {
-  const [productsData, setProductsData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [searchLoading, setSearchLoading] = useState(false);
+  const {
+    data: productsData,
+    loading,
+    error,
+  } = useFetch(fetchProducts());
   const [searchQuery, setSearchQuery] = useState("");
+  const {
+    data: searchData,
+    loading: searchLoading,
+    error: searchError,
+  } = useFetch(searchProductsByQuery(searchQuery));
+
 
   const navigate = useNavigate();
-  useEffect(() => {
-    const respose = fetchProducts(); //network call
-    respose
-      .then((data) => {
-        setProductsData(data.products);
-      })
-      .catch((error) => {
-        setError(
-          "Error fetching products. Please try again. the error is " +
-            error.message,
-        );
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
 
   function navigateToNewProduct() {
     navigate("/products/add");
-  }
-  async function handleSearchSubmit() {
-    if (!searchQuery.trim()) {
-      setError("Please enter a valid search term.");
-      return;
-    }
-    setError("");
-    setSearchLoading(true);
-    try {
-      const data = await searchProductsByQuery(searchQuery);
-      setProductsData(data.products);
-    } catch (error) {
-      setError(error.message || "Error searching products.");
-    } finally {
-      setSearchLoading(false);
-    }
   }
   function handleCartClick() {
     navigate("/cart");
@@ -56,12 +32,12 @@ export default function ProductList() {
         <h1 className="text-2xl md:text-3xl font-bold text-indigo-700 m-auto">
           Product List
         </h1>
-        {error ? (
+        {error || searchError ? (
           <p
             role="alert"
             className="text-center text-lg font-semibold text-red-500 mt-6"
           >
-            {error}
+            {error || searchError }
           </p>
         ) : null}
         <button
@@ -83,29 +59,9 @@ export default function ProductList() {
               const value = e.target.value;
 
               setSearchQuery(value);
-              setError("");
 
-              if (!value.trim()) {
-                setSearchLoading(true);
-
-                try {
-                  const data = await fetchProducts();
-
-                  setProductsData(data.products);
-                } catch (error) {
-                  setError(error.message || "Error fetching products.");
-                } finally {
-                  setSearchLoading(false);
-                }
-              }
             }}
           />
-          <button
-            onClick={handleSearchSubmit}
-            className="w-full sm:w-auto ml-2 p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            Search
-          </button>
         </div>
         <button
           onClick={navigateToNewProduct}
@@ -119,10 +75,11 @@ export default function ProductList() {
           <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
             Loading...
           </p>
-        ) : !loading && productsData.length === 0 ? (
+        ) : !loading && searchData.products.length === 0 ? (
           <p>No products found</p>
         ) : (
-          productsData.map((product) => (
+          productsData &&
+          searchData.products.map((product) => (
             <Product
               key={product.id}
               product={product}
