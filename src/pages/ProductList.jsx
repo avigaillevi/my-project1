@@ -3,14 +3,10 @@ import Product from "../components/Product";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
+import { motion } from "framer-motion";
 
 export default function ProductList() {
-  
-  const {
-    data: productsData,
-    loading,
-    error,
-  } = useFetch(fetchProducts());
+  const { data: productsData, loading, error } = useFetch(fetchProducts());
   const [searchQuery, setSearchQuery] = useState("");
   const {
     data: searchData,
@@ -19,10 +15,8 @@ export default function ProductList() {
   } = useFetch(searchProductsByQuery(searchQuery));
 
   const navigate = useNavigate();
-  //const test = undefined;
-//  throw new Error("Test Error Boundary");
 
-  function navigateToNewProduct() {    
+  function navigateToNewProduct() {
     navigate("/products/add");
   }
   function handleCartClick() {
@@ -30,11 +24,11 @@ export default function ProductList() {
   }
   function handleTryAgain() {
     window.location.reload();
-    navigate("/"); // Navigate to the home page to trigger a re-fetch of products 
-  } 
+    navigate("/"); // Navigate to the home page to trigger a re-fetch of products
+  }
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* <h1>{test.name}</h1> */}
+    <div className="dark">
+    <div className="container mx-auto px-4 py-8 dark:bg-gray-800">
       <div className="flex flex-col md:flex items-center justify-between mb-6 gap-4">
         <h1 className="text-2xl md:text-3xl font-bold text-indigo-700 m-auto">
           Product List
@@ -42,13 +36,13 @@ export default function ProductList() {
 
         <button
           onClick={handleCartClick}
-          className="p-2 rounded-full border-4 bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="p-2 rounded-full border-4 bg-primary text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           Cart
         </button>
       </div>
       <div className="flex flex-col md:flex flex-row md:items-start md:place-content-between gap-4 mb-6">
-        <div className="flex flex-col sm:flex-row items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2 dark:bg-gray-700 p-2 rounded-full dark:text-white">
           <input
             type="text"
             placeholder="Search..."
@@ -59,33 +53,59 @@ export default function ProductList() {
               const value = e.target.value;
 
               setSearchQuery(value);
-
             }}
           />
         </div>
         <button
           onClick={navigateToNewProduct}
-          className="w-full sm:w-full md:w-auto p-2 px-5 rounded-full border-4  bg-indigo-500 text-white hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-auto sm:w-full md:w-auto p-2 px-5 rounded-full border-4  bg-primary text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
           + add product
         </button>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
+      >
         {loading || searchLoading ? (
-          <p className="text-center text-2xl font-semibold text-indigo-600 animate-pulse">
-            Loading...
-          </p>
-        ) : !loading && searchData.products.length === 0 || error || searchError ? (
-          <p role="alert"
-            className="text-center text-lg font-semibold text-red-500 mt-6"
-            >No products found
-            <button 
+          <div className="w-full max-w-[420px] mx-auto bg-white rounded-2xl p-6">
+            <div className="h-10 bg-gray-200 rounded animate-pulse mb-6"></div>
+
+            <div className="w-56 h-56 bg-gray-200 rounded-xl animate-pulse mx-auto mb-6"></div>
+
+            <div className="space-y-3">
+              <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+              <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+            </div>
+          </div>
+        ) : (!loading && searchData.products.length === 0) ||
+          error ||
+          searchError ? (
+          <div className="col-span-full flex flex-col items-center gap-4">
+            <img
+              src="/images/not_found.svg"
+              alt="No product found"
+              className="w-64"
+            />
+
+            <h2 className="text-2xl font-bold text-indigo-700">
+              Products Not Found
+            </h2>
+
+            <p className="text-indigo-700">
+              The requested product does not exist.
+            </p>
+
+            <button
               onClick={handleTryAgain}
-              className="ml-2 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
+              className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-full"
             >
               Try Again
             </button>
-            </p>
+          </div>
         ) : (
           productsData &&
           searchData.products.map((product) => (
@@ -96,7 +116,8 @@ export default function ProductList() {
             />
           ))
         )}
-      </div>
+      </motion.div>
+    </div>
     </div>
   );
 }

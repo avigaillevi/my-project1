@@ -54,7 +54,7 @@ export default function NewProduct() {
           {message}
           <button
             onClick={handleTryAgain}
-            className="ml-2 px-4 py-2 bg-indigo-500 text-white rounded-full hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="ml-2 px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             Try Again
           </button>
@@ -66,13 +66,13 @@ export default function NewProduct() {
       >
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-700 text-sm font-bold mb-2"
             htmlFor="title"
           >
             Title
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             type="text"
             placeholder="Product Title"
@@ -82,13 +82,13 @@ export default function NewProduct() {
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-700 text-sm font-bold mb-2"
             htmlFor="description"
           >
             Description
           </label>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:shadow-outline"
             id="description"
             placeholder="Product Description"
             value={description}
@@ -97,13 +97,13 @@ export default function NewProduct() {
         </div>
         <div className="mb-4">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="block text-slate-700 text-sm font-bold mb-2"
             htmlFor="price"
           >
             Price
           </label>
           <input
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-slate-700 leading-tight focus:outline-none focus:shadow-outline"
             id="price"
             type="number"
             placeholder="Product Price"
@@ -113,7 +113,7 @@ export default function NewProduct() {
 
           <button
             type="submit"
-            className="bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-600 mt-4"
+            className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-hover mt-4"
           >
             Add Product
           </button>

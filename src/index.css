@@ -1,1 +1,11 @@
 @import "tailwindcss";
+
+/* to turn on the dark mode execute the line under */
+/* @custom-variant dark (&:where(.dark, .dark *)); */
+
+@theme {
+  --color-primary: #4338ca;
+  --color-primary-hover: #6366f1;
+  --color-primary-light: #eef2ff;
+  --color-primary-border: #c7d2fe;
+}
