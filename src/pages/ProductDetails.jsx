@@ -2,11 +2,12 @@ import { useParams } from "react-router";
 import { getProduct } from "../services/apirequest";
 import useFetch from "../hooks/useFetch";
 import { motion } from "framer-motion";
+import ErrorPage from "../components/ErrorPage";
 
 export default function ProductDetails() {
   const { id: productId } = useParams();
 
-  const { data: productData, loading, error } = useFetch(getProduct(productId));
+  const { data: productData, loading, error ,refetch} = useFetch(getProduct(productId));
 
   return (
     <div className="min-h-[80vh] bg-gradient-to-br from-indigo-100 via-white to-indigo-200 py-10 px-4">
@@ -94,33 +95,24 @@ export default function ProductDetails() {
             </div>
           </div>
         </motion.div>
-      ) : (
-        <div className="flex justify-center items-center min-h-screen">
-          <div className="flex flex-col gap-4 items-center text-center">
-            <img
-              src="/images/not_found.svg"
-              alt="No product found"
-              className="w-64"
-            />
+      ) : error.status === 404 ? (
+        <div className="col-span-full flex flex-col items-center gap-4">
+          <img
+            src="/images/page-not-found.svg"
+            alt="page not found"
+            className="w-64"
+          />
 
-            <h2 className="text-2xl font-bold text-indigo-700 ">
-              Product Not Found
-            </h2>
-
-            <p className="text-indigo-700 ">
-              (The requested product does not exist.)
-            </p>
-          </div>
+          <h2 className="text-2xl font-bold text-indigo-700">page Not Found</h2>
+          <button
+            onClick={refetch}
+            className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-full"
+          >
+            Try Again
+          </button>
         </div>
-      )}
-      {!error?.response?.status === 404 && (
-        <p
-          role="alert"
-          className="text-center text-lg font-semibold text-red-500 mb-6"
-        >
-          {error.message ||
-            "An error occurred while fetching product details. Please try again."}
-        </p>
+      ) : (
+        error && <ErrorPage></ErrorPage>
       )}
     </div>
   );

@@ -4,9 +4,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useFetch from "../hooks/useFetch";
 import { motion } from "framer-motion";
+import ErrorPage from "../components/ErrorPage";
 
 export default function ProductList() {
-  const { data: productsData, loading, error } = useFetch(fetchProducts());
+  const { data: productsData, loading, error ,refetch} = useFetch(fetchProducts());
   const [searchQuery, setSearchQuery] = useState("");
   const {
     data: searchData,
@@ -23,8 +24,7 @@ export default function ProductList() {
     navigate("/cart");
   }
   function handleTryAgain() {
-    window.location.reload();
-    navigate("/"); // Navigate to the home page to trigger a re-fetch of products
+    refetch();
   }
   return (
     <div className="dark">
@@ -49,9 +49,7 @@ export default function ProductList() {
             className="ml-2 p-2 rounded-full border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             value={searchQuery}
             onChange={async (e) => {
-              setSearchQuery(e.target.value);
               const value = e.target.value;
-
               setSearchQuery(value);
             }}
           />
@@ -81,9 +79,7 @@ export default function ProductList() {
               <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
             </div>
           </div>
-        ) : (!loading && searchData.products.length === 0) ||
-          error ||
-          searchError ? (
+        ) : (!loading && searchData.products.length === 0) ? (
           <div className="col-span-full flex flex-col items-center gap-4">
             <img
               src="/images/not_found.svg"
@@ -94,11 +90,18 @@ export default function ProductList() {
             <h2 className="text-2xl font-bold text-indigo-700">
               Products Not Found
             </h2>
+          </div>
+        ) :(error?.status === 404 || searchError ) ? (
+          <div className="col-span-full flex flex-col items-center gap-4">
+            <img
+              src="/images/page-not-found.svg"
+              alt="page not found"
+              className="w-64"
+            />
 
-            <p className="text-indigo-700">
-              The requested product does not exist.
-            </p>
-
+            <h2 className="text-2xl font-bold text-indigo-700">
+              page Not Found
+            </h2>
             <button
               onClick={handleTryAgain}
               className="px-4 py-2 bg-primary hover:bg-primary-hover text-white rounded-full"
@@ -106,7 +109,7 @@ export default function ProductList() {
               Try Again
             </button>
           </div>
-        ) : (
+      ): (error)?(<ErrorPage></ErrorPage>): (
           productsData &&
           searchData.products.map((product) => (
             <Product

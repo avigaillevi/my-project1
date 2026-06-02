@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { addToCart } from "../services/apirequest";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import ErrorPage from "./ErrorPage";
 
 export default function Product({ product, showAddToCartButton  }) {
   const navigate = useNavigate();
@@ -17,8 +18,8 @@ export default function Product({ product, showAddToCartButton  }) {
       .then(() => {
         navigate("/cart", { state: { message: `Product ${product.title} added to cart successfully!` } });
       })
-      .catch(() => {
-        setError("Error adding product to cart. Please try again.");
+      .catch((error) => {
+        setError(error);
       });
   }
 
@@ -30,7 +31,7 @@ export default function Product({ product, showAddToCartButton  }) {
       transition={{ duration: 0.4 }}
       className="bg-white border-4 border-indigo-500/75 shadow-md p-4 rounded-xl text-center dark:bg-gray-700 text-white"
     >
-      <h2 className="text-xl font-semibold mb-2 text-center">
+      <h2 className="text-xl font-semibold mb-2 text-center text-indigo-700">
         {product.title}
       </h2>
       <img
@@ -38,7 +39,7 @@ export default function Product({ product, showAddToCartButton  }) {
         alt={product.title}
         className="w-56 m-auto h-44 object-cover mb-4 rounded border-indigo-500/75 text-center"
       />
-      <p className="text-2xl font-bold">${product.price}</p>
+      <p className="text-2xl font-bold text-indigo-700">${product.price}</p>
       <button
         onClick={handleShowProduct}
         className="p-2 rounded-full border-4 bg-primary text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -53,10 +54,20 @@ export default function Product({ product, showAddToCartButton  }) {
           Add To Cart
         </button>
       ) }
-      {error && (
-        <p role="alert" className="text-center text-lg font-semibold text-indigo-700 mt-6">
-          {error}
-        </p>
+      {(error && error.response?.status === 404)? (
+        <div className="col-span-full flex flex-col items-center gap-4">
+            <img
+              src="/images/page-not-found.svg"
+              alt="page not found"
+              className="w-64"
+            />
+
+            <h2 className="text-2xl font-bold text-indigo-700">
+              page Not Found
+            </h2>
+          </div>
+      ) : error && (
+        <ErrorPage></ErrorPage>
       )}
     </motion.div>
     </div>
