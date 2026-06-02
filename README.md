@@ -70,20 +70,6 @@ Dark mode can be toggled using the button in the top-right corner.
 
 ## 📸 Screenshots
 
-### Product List
-![Product List](./public/screenshots/home.png)
-
-### Dark Mode
-![Dark Mode](./public/screenshots/dark-mode.png)
-
-### Cart
-![Cart](./public/screenshots/cart.png)
-
-### Empty State
-![Empty State](./public/screenshots/empty.png)
---- 
-
-
 ### Home Page
 
 ![Home](./screenshots/home.png)
@@ -99,3 +85,30 @@ Dark mode can be toggled using the button in the top-right corner.
 ### Add Product
 
 ![Add Product](./screenshots/addproduct.png)
+
+ ---
+ 
+## 📸 Screenshots after updating
+
+
+### Product List
+![Product List](./screenshots/productlist_update.png)
+
+### Product Detail
+![Product Detail](./screenshots/productdetail.update.png)
+
+### not found products in cart
+![not found](./screenshots/not_gound.png)
+
+### loading
+![loading](./screenshots/loading1.png)
+
+### Dark Mode
+![Dark Mode](./screenshots/dark_mode.png)
+
+### Cart
+![cart update](./screenshots/cart_update.png)
+
+### Empty State
+![Empty State](./screenshots/empty_state.png)
+--- 
