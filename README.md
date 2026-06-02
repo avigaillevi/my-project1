@@ -49,8 +49,40 @@ npm run dev
 - `src/services/` - API calls
 
 ---
-  
-## Screenshots
+## 🎨 UI Improvements
+
+This update includes a complete UI refresh with a consistent design system.
+
+### ✨ Changes made:
+- Unified color palette using Indigo theme
+- Improved layout spacing and alignment
+- Added Dark Mode support
+- Better empty states (Cart / Not Found pages)
+- Consistent button and input styling
+
+---
+
+## 🌙 Dark Mode
+
+Dark mode can be toggled using the button in the top-right corner.
+
+---
+
+## 📸 Screenshots
+
+### Product List
+![Product List](./public/screenshots/home.png)
+
+### Dark Mode
+![Dark Mode](./public/screenshots/dark-mode.png)
+
+### Cart
+![Cart](./public/screenshots/cart.png)
+
+### Empty State
+![Empty State](./public/screenshots/empty.png)
+--- 
+
 
 ### Home Page
 
