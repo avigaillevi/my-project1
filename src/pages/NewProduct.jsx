@@ -1,6 +1,7 @@
 import { postProduct } from "../services/apirequest";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import ErrorPage from "../components/ErrorPage";
 
 export default function NewProduct() {
   const navigate = useNavigate();
@@ -32,16 +33,14 @@ export default function NewProduct() {
           navigate(`/products/${id - 1}`);
         }, 10000);
       })
-      .catch((error) => {
+      .catch(() => {
         setMessage(
-          "Error adding product. Please try again. the error is " +
-            error.message,
+          "Error adding product. Please try again. We could not save the product right now. "
         );
       });
   }
 
     function handleTryAgain() {
-    window.location.reload();
     navigate("/products/add"); // Navigate to the home page to trigger a re-fetch of products 
   }
   return (
@@ -52,13 +51,10 @@ export default function NewProduct() {
       {message && (
         <p className="mt-4 text-center text-lg font-semibold text-indigo-700">
           {message}
-          <button
-            onClick={handleTryAgain}
-            className="ml-2 px-4 py-2 bg-primary text-white rounded-full hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            Try Again
-          </button>
         </p>
+      )}
+      {message.includes("Error") && (
+        <ErrorPage refetch={handleTryAgain}></ErrorPage>
       )}
       <form
         onSubmit={handlePost}

@@ -3,6 +3,7 @@ import Product from "../components/Product";
 import useFetch from "../hooks/useFetch";
 import { motion } from "framer-motion";
 import ErrorPage from "../components/ErrorPage";
+import ProductSkeleton from "../components/ProductSkeleton";
 
 export default function Cart() {
   const { data: cartItems, loading, error, refetch } = useFetch(getCart());
@@ -20,17 +21,7 @@ export default function Cart() {
         Cart
       </h1>
       {loading ? (
-        <div className="w-full max-w-[420px] mx-auto bg-white rounded-2xl p-6">
-          <div className="h-10 bg-gray-200 rounded animate-pulse mb-6"></div>
-
-          <div className="w-56 h-56 bg-gray-200 rounded-xl animate-pulse mx-auto mb-6"></div>
-
-          <div className="space-y-3">
-            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-            <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
-          </div>
-        </div>
+        <ProductSkeleton />
       ) : isCartEmpty ? (
         <div className="flex flex-col items-center gap-4">
           <img
@@ -43,7 +34,7 @@ export default function Cart() {
             your cart is empty
           </h2>
         </div>
-      ) : (error && error.status === 404) ? (
+      ) : error?.response?.status === 404 ? (
         <div className="col-span-full flex flex-col items-center gap-4">
           <img
             src="/images/page-not-found.svg"
@@ -59,19 +50,20 @@ export default function Cart() {
             Try Again
           </button>
         </div>
-      ) : error ?( <ErrorPage></ErrorPage>) : (
-          <ul className="space-y-4">
-            {cartItems.products.map((item) => (
-              <div
-                key={item.id}
-                className="rounded-sm md:bg-indigo-50 md:border-2 md:border-primary-border md:rounded-xl md:p-3 md:shadow-sm md:hover:shadow-md md:transition-all md:duration-200"
-              >
-                <Product product={item} showAddToCartButton={false} />
-              </div>
-            ))}
-          </ul>
-        )
-      }
+      ) : error ? (
+        <ErrorPage refetch={refetch}></ErrorPage>
+      ) : (
+        <ul className="space-y-4">
+          {cartItems.products.map((item) => (
+            <div
+              key={item.id}
+              className="rounded-sm md:bg-indigo-50 md:border-2 md:border-primary-border md:rounded-xl md:p-3 md:shadow-sm md:hover:shadow-md md:transition-all md:duration-200"
+            >
+              <Product product={item} showAddToCartButton={false} />
+            </div>
+          ))}
+        </ul>
+      )}
     </motion.div>
   );
 }

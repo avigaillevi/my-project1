@@ -4,8 +4,9 @@ import { render, screen } from "@testing-library/react";
 import axios from "axios";
 import * as api from "../services/apirequest";
 import ProductList from "../pages/ProductList";
-import { MemoryRouter } from "react-router-dom";
-import {beforeEach} from "vitest";
+import ProductDetails from "../pages/ProductDetails";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { beforeEach } from "vitest";
 
 vi.mock("axios");
 beforeEach(() => {
@@ -32,7 +33,22 @@ describe("ProductList", () => {
     );
 
     const text = await screen.findByText("Products Not Found");
-
     expect(text).toBeInTheDocument();
+  });
+});
+describe("ProductDetails", () => {
+  it("error message on failed request", async () => {
+    axios.get.mockRejectedValueOnce({   status: 404  });
+    render(
+      <MemoryRouter initialEntries={["/products/1"]}>
+        <Routes>
+          <Route path="/products/:id" element={<ProductDetails />} />
+        </Routes>
+      </MemoryRouter>,
+    );
+    expect(await screen.findByText(/page not found/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /try again/i }),
+    ).toBeInTheDocument();
   });
 });
