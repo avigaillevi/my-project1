@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import ProductRouts from './routes/productRoutes.js';
 import CartRoutes from './routes/cartRoutes.js';
-//import errorHandler from './middleware/errorHandler.js';
+import errorHandler from './middlewares/errorHandler.js';
+
 const app = express();
 
 app.use(cors());
@@ -14,5 +15,5 @@ app.use('/api/carts', CartRoutes);
 //   res.status(200).json({ status: "ok" });
 // });
 
-// app.use(errorHandler);
+app.use(errorHandler);
 export default app;

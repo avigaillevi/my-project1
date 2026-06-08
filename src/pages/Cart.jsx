@@ -69,7 +69,7 @@ export default function Cart() {
                       refetch();
                     }
                   }
-                  className="ml-4 px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs"
+                  className="ml-4 px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs"
                 >
                   -
                 </button>
@@ -78,7 +78,7 @@ export default function Cart() {
                     await addToCart(item.productId, 1);
                     refetch();
                   }}
-                  className="ml-4 px-2 py-1 bg-red-500 hover:bg-red-600 text-white rounded-full text-xs"
+                  className="ml-4 px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs"
                 >
                   +
                 </button>

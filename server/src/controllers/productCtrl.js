@@ -1,82 +1,123 @@
-import Product from '../models/Product.js';
+import Product from "../models/Product.js";
+import mongoose from "mongoose";
 
-function getAll(req, res) {
-  Product.find()
-    .then(products => {
-      res.status(200).json({ message: "All products", data: products });
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error fetching products", error });
-    });
+async function getAll(req, res, next) {
+  try {
+    const products = await Product.find();
+
+    res.status(200).json({ message: "All products", data: products });
+  } catch (error) {
+    next(error);
+  }
 }
 
-function getById(req, res) {
-  const { id } = req.params;
+async function getById(req, res, next) {
+  try {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
 
-  Product.findById(id)
-    .then(product => {
-      if (!product) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.status(200).json({ data: product });
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error fetching product", error });
-    });
+    const product = await Product.findById(id);
+
+    if (!product) {
+      const err = new Error("Product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json({ data: product });
+  } catch (error) {
+    next(error);
+  }
 }
 
-function create(req, res) {
-  const product = new Product(req.body);
+async function create(req, res, next) {
+  try {
+    if (!req.body.title || !req.body.price) {
+      const err = new Error("Title and price are required");
+      err.statusCode = 400;
+      throw err;
+    }
+    const product = new Product(req.body);
+    const saved = await product.save();
 
-  product.save()
-    .then(saved => {
-      res.status(201).json(saved);
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error creating product", error });
-    });
+    res.status(201).json(saved);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function update(req, res) {
-  const { id } = req.params;
+async function update(req, res, next) {
+  try {
+    const { id } = req.params;
 
-  Product.findByIdAndUpdate(id, req.body, { new: true })
-    .then(updated => {
-      if (!updated) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.status(200).json(updated);
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error updating product", error });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    if (!req.body.title || !req.body.price) {
+      const err = new Error("Title and price are required");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const updated = await Product.findByIdAndUpdate(id, req.body, {
+      new: true,
     });
+
+    if (!updated) {
+      const err = new Error("Product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json(updated);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function remove(req, res) {
-  const { id } = req.params;
+async function remove(req, res, next) {
+  try {
+    const { id } = req.params;
 
-  Product.findByIdAndDelete(id)
-    .then(deleted => {
-      if (!deleted) {
-        return res.status(404).json({ message: "Product not found" });
-      }
-      res.status(200).json(deleted);
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error deleting product", error });
-    });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const deleted = await Product.findByIdAndDelete(id);
+
+    if (!deleted) {
+      const err = new Error("Product not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json(deleted);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function searchbyText(req, res) {
-  const { query } = req.query;
+async function searchbyText(req, res, next) {
+  try {
+    const { query } = req.query;
 
-  Product.find({ title: { $regex: query, $options: 'i' } })
-    .then(products => {
-      res.status(200).json({ message: "Search results", data: products });
-    })
-    .catch(error => {
-      res.status(500).json({ message: "Error searching products", error });
+    const products = await Product.find({
+      title: { $regex: query, $options: "i" },
     });
+
+    res.status(200).json({ message: "Search results", data: products });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export default {
@@ -85,5 +126,5 @@ export default {
   create,
   update,
   remove,
-  searchbyText
+  searchbyText,
 };

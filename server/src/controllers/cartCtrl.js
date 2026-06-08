@@ -1,111 +1,162 @@
 import Cart from "../models/Cart.js";
 import Product from "../models/Product.js";
-function getAll(req, res) {
-  Cart.find()
-    .populate("products.productId")
-    .then((carts) => {
-      res.status(200).json({ message: "All carts", data: carts });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Error fetching carts", error });
-    });
+import mongoose from "mongoose";
+
+async function getAll(req, res, next) {
+  try {
+    const carts = await Cart.find().populate("products.productId");
+
+    res.status(200).json({ message: "All carts", data: carts });
+  } catch (error) {
+    next(error);
+  }
 }
 
-function getById(req, res) {
-  const { id } = req.params;
-  Cart.findById(id)
-    .populate("products.productId")
-    .then((cart) => {
-      if (!cart) {
-        return res.status(404).json({ message: "Cart not found" });
-      }
-      res.status(200).json({ data: cart });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Error fetching cart", error });
-    });
+async function getById(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const cart = await Cart.findById(id).populate("products.productId");
+
+    if (!cart) {
+      const err = new Error("Cart not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json({ data: cart });
+  } catch (error) {
+    next(error);
+  }
 }
 
-function create(req, res) {
-  const cart = new Cart(req.body);
-  cart
-    .save()
-    .then((saved) => {
-      res.status(201).json(saved);
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Error creating cart", error });
-    });
+async function create(req, res, next) {
+  try {
+    if (!req.body.products) {
+      const err = new Error("Products are required");
+      err.statusCode = 400;
+      throw err;
+    }
+    const cart = new Cart(req.body);
+    const saved = await cart.save();
+
+    res.status(201).json(saved);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function update(req, res) {
-  const { id } = req.params;
-  Cart.findByIdAndUpdate(id, req.body, { new: true })
-    .then((updated) => {
-      if (!updated) {
-        return res.status(404).json({ message: "Cart not found" });
-      }
-      res.status(200).json(updated);
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Error updating cart", error });
+async function update(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const updated = await Cart.findByIdAndUpdate(id, req.body, {
+      new: true,
     });
+
+    if (!updated) {
+      const err = new Error("Cart not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json(updated);
+  } catch (error) {
+    next(error);
+  }
 }
 
-function remove(req, res) {
-  const { id } = req.params;
-  Cart.findByIdAndDelete(id)
-    .then((deleted) => {
-      if (!deleted) {
-        return res.status(404).json({ message: "Cart not found" });
-      }
-      res.status(200).json({ message: "Cart deleted" });
-    })
-    .catch((error) => {
-      res.status(500).json({ message: "Error deleting cart", error });
-    });
+async function remove(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+
+    const deleted = await Cart.findByIdAndDelete(id);
+
+    if (!deleted) {
+      const err = new Error("Cart not found");
+      err.statusCode = 404;
+      throw err;
+    }
+
+    res.status(200).json({ message: "Cart deleted" });
+  } catch (error) {
+    next(error);
+  }
 }
 
-async function addToCart(req, res) {
+async function addToCart(req, res, next) {
   try {
     const { id } = req.params;
     const { productId, quantity } = req.body;
 
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(productId)) {
+      const err = new Error("Invalid ID format");
+      err.statusCode = 400;
+      throw err;
+    }
+    if (typeof quantity !== "number" || quantity === 0) {
+      const err = new Error("Quantity must be a non-zero number");
+      err.statusCode = 400;
+      throw err;
+    }
+
     const cart = await Cart.findById(id);
 
     if (!cart) {
-      return res.status(404).json({
-        message: "Cart not found",
-      });
+      const err = new Error("Cart not found");
+      err.statusCode = 404;
+      throw err;
     }
 
     const product = await Product.findById(productId);
 
     if (!product) {
-      return res.status(404).json({
-        message: "Product not found",
-      });
+      const err = new Error("Product not found");
+      err.statusCode = 404;
+      throw err;
     }
 
     const existingProduct = cart.products.find(
-      (p) => p.productId.toString() === productId
+      (p) => p.productId.toString() === productId,
     );
 
     if (existingProduct) {
       existingProduct.quantity += quantity;
+
       if (existingProduct.quantity <= 0) {
         cart.products = cart.products.filter(
-          (p) => p.productId.toString() !== productId
+          (p) => p.productId.toString() !== productId,
         );
+
         cart.totalProducts -= 1;
-        cart.total -= product.price ;
+        cart.total -= product.price;
+
+        const updated = await cart.save();
+
         return res.status(200).json({
           message: "Product removed from cart",
-          data: await cart.save(),
+          data: updated,
         });
       }
     } else {
-      console.log("Adding new product to cart:", { productId, quantity });
       cart.products.push({
         productId,
         quantity,
@@ -122,12 +173,7 @@ async function addToCart(req, res) {
       data: updatedCart,
     });
   } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      message: "Error adding to cart",
-      error: error.message,
-    });
+    next(error);
   }
 }
 
