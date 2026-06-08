@@ -1,6 +1,8 @@
 # Product Store
 
-Product Store is a React + Vite frontend that fetches products from a public API, lets users search items, view details, and add products to a cart.
+Full Stack Project
+
+Product Store is a React + Vite frontend that fetches products from my API, lets users search items, view details, and add products to a cart.
 
 ---
 
@@ -149,4 +151,4 @@ Dark mode can be toggled using the button in the top-right corner.
 
 ## short video
 
-![New Product](./screenshots/video.mp4)
+[demo vudeo](https://drive.google.com/file/d/10vX4DiWmM0nuQmU_EXqd-PoZqVGN9Oe-/view?usp=sharing)
