@@ -7,8 +7,8 @@ import ProductSkeleton from "../components/ProductSkeleton";
 
 export default function ProductDetails() {
   const { id: productId } = useParams();
-
   const { data: productData, loading, error ,refetch} = useFetch(getProduct(productId));
+
 
   return (
     <div className="min-h-[80vh] bg-gradient-to-br from-indigo-100 via-white to-indigo-200 py-10 px-4">
@@ -27,33 +27,35 @@ export default function ProductDetails() {
         >
           <div className="bg-primary py-4">
             <h2 className="text-3xl font-bold text-white text-center text-indigo-700 px-4">
-              {productData.title}
+              {productData.data.title}
             </h2>
           </div>
 
           <div className="p-4">
             <div className="flex justify-center mb-8">
               <img
-                src={productData.thumbnail}
-                alt={productData.title}
+                src={productData.data.img}
+                alt={productData.data.title}
                 className="w-56 h-56 object-cover rounded-xl border-4 border-indigo-300 shadow-lg"
               />
             </div>
 
             <p className="text-gray-700 text-lg leading-8 text-center mb-8">
-              {productData.description}
+              {productData.data.description}
             </p>
 
             <div className="text-center mb-8">
               <p className="text-2xl font-extrabold text-indigo-700">
-                ${productData.price}
+                ${productData.data.price}
               </p>
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-center">
               <div className="bg-indigo-50 border border-primary-border rounded-xl p-2 shadow-sm">
-                <p className="text-sm md:text-lg text-gray-500 mb-1">Brand</p>
-                <p className="font-bold text-indigo-700">{productData.brand}</p>
+                 <p className="text-sm md:text-lg text-gray-500 mb-1">Weight</p>
+                <p className="font-bold text-indigo-700">
+                  {productData.data.weight} kg
+                </p>
               </div>
 
               <div className="bg-indigo-50 border border-primary-border rounded-xl p-2 shadow-sm">
@@ -61,28 +63,22 @@ export default function ProductDetails() {
                   Category
                 </p>
                 <p className="font-bold text-indigo-700">
-                  {productData.category}
+                  {productData.data.category}
                 </p>
               </div>
 
               <div className="bg-indigo-50 border border-primary-border rounded-xl p-2 shadow-sm">
                 <p className="text-sm md:text-lg text-gray-500 mb-1">Rating</p>
                 <p className="font-bold text-indigo-700">
-                  ⭐ {productData.rating}
+                  ⭐ {productData.data.rating}
                 </p>
               </div>
 
               <div className="bg-indigo-50 border border-primary-border rounded-xl p-2 shadow-sm">
                 <p className="text-sm md:text-lg text-gray-500 mb-1">Stock</p>
-                <p className="font-bold text-indigo-700">{productData.stock}</p>
+                <p className="font-bold text-indigo-700">{productData.data.stock}</p>
               </div>
-
-              <div className="col-span-2 bg-indigo-50 border border-primary-border rounded-xl p-2 shadow-sm">
-                <p className="text-sm md:text-lg text-gray-500 mb-1">Weight</p>
-                <p className="font-bold text-indigo-700">
-                  {productData.weight} kg
-                </p>
-              </div>
+              
             </div>
           </div>
         </motion.div>

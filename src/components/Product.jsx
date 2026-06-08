@@ -10,11 +10,11 @@ export default function Product({ product, showAddToCartButton  }) {
   const [error, setError] = useState("");
 
   function handleShowProduct() {
-    navigate(`/products/${product.id}`);
+    navigate(`/products/${product._id}`);
   }
 
   function handleAddToCart() {
-    addToCart(product.id) //network call
+    addToCart(product, 1) //network call
       .then(() => {
         navigate("/cart", { state: { message: `Product ${product.title} added to cart successfully!` } });
       })
@@ -35,7 +35,7 @@ export default function Product({ product, showAddToCartButton  }) {
         {product.title}
       </h2>
       <img
-        src={product.thumbnail}
+        src={product.img}
         alt={product.title}
         className="w-56 m-auto h-44 object-cover mb-4 rounded border-indigo-500/75 text-center"
       />

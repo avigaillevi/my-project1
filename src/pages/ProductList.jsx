@@ -67,7 +67,7 @@ export default function ProductList() {
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch"
       >
         {loading || searchLoading ? (<ProductSkeleton />
-        ) : (!loading && searchData.products.length === 0) ? (
+        ) : (!loading && searchData.data.length === 0) ? (
           <div className="col-span-full flex flex-col items-center gap-4">
             <img
               src="/images/not_found.svg"
@@ -81,10 +81,10 @@ export default function ProductList() {
           </div>
         ) :(error?.response?.status === 404 ) ? (<The404Page refetch={refetch}></The404Page >
       ): (error || searchError)?(<ErrorPage refetch={refetch}></ErrorPage>): (
-          productsData &&
-          searchData.products.map((product) => (
+          productsData&&
+          searchData.data.map((product) => (
             <Product
-              key={product.id}
+              key={product._id}
               product={product}
               showAddToCartButton={true}
             />

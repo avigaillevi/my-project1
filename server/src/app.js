@@ -1,0 +1,18 @@
+import express from 'express';
+import cors from 'cors';
+import ProductRouts from './routes/productRoutes.js';
+import CartRoutes from './routes/cartRoutes.js';
+//import errorHandler from './middleware/errorHandler.js';
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use('/api/products', ProductRouts);
+app.use('/api/carts', CartRoutes);
+
+// app.get('/api/health', (req, res) => {
+//   res.status(200).json({ status: "ok" });
+// });
+
+// app.use(errorHandler);
+export default app;
