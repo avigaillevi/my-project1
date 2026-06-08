@@ -44,16 +44,19 @@ npm run dev
 ---
 
 ## Project structure
+
 - `src/pages/` - full screens
 - `src/components/` - reusable UI pieces
 - `src/services/` - API calls
 
 ---
+
 ## 🎨 UI Improvements
 
 This update includes a complete UI refresh with a consistent design system.
 
 ### ✨ Changes made:
+
 - Unified color palette using Indigo theme
 - Improved layout spacing and alignment
 - Added Dark Mode support
@@ -86,29 +89,64 @@ Dark mode can be toggled using the button in the top-right corner.
 
 ![Add Product](./screenshots/addproduct.png)
 
- ---
- 
+---
+
 ## 📸 Screenshots after updating
 
-
 ### Product List
+
 ![Product List](./screenshots/productlist_update.png)
 
 ### Product Detail
+
 ![Product Detail](./screenshots/productdetail.update.png)
 
 ### not found products in cart
+
 ![not found](./screenshots/not_gound.png)
 
 ### loading
+
 ![loading](./screenshots/loading1.png)
 
 ### Dark Mode
+
 ![Dark Mode](./screenshots/dark_mode.png)
 
 ### Cart
+
 ![cart update](./screenshots/cart_update.png)
 
 ### Empty State
+
 ![Empty State](./screenshots/empty_state.png)
---- 
+
+---
+
+## 📸 Screenshots with my API
+
+### Product List
+
+![Product List](./screenshots/pl_my_api.png)
+
+### Product Detail
+
+![Product Detail](./screenshots/pd_my_api.png)
+
+### Cart
+
+![cart update](./screenshots/cart_my_api.png)
+
+### serch products
+
+![serch](./screenshots/search_api.png)
+
+### New Product
+
+![New Product](./screenshots/np_my_api.png)
+
+---
+
+## short video
+
+![New Product](./screenshots/video.mp4)
