@@ -5,7 +5,7 @@ export default function ErrorPage(refetch) {
         <h1 className="text-4xl font-bold text-red-600 mb-4">Something went wrong.</h1>
         <p className="text-lg text-red-500">Please try again later.</p>
         <button
-          onClick={refetch}
+          onClick={() => refetch()}
           className="mt-6 px-4 py-2 rounded-full bg-red-500 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
         >
           Try Again

@@ -7,7 +7,8 @@ import ProductSkeleton from "../components/ProductSkeleton";
 import { addToCart } from "../services/apirequest";
 
 export default function Cart() {
-  const { data: cartItems, loading, error, refetch } = useFetch(getCart());
+  const cartId = "6a25e4c6545a85eee5159a5b"; // Replace with actual cart ID
+  const { data: cartItems, loading, error, refetch } = useFetch(getCart(cartId));
   // Check if the cart is empty
   const isCartEmpty =
     cartItems && cartItems.products && cartItems.products.length === 0;
@@ -65,7 +66,7 @@ export default function Cart() {
                 Quantity: {item.quantity}
                 <button
                   onClick={async() => {
-                      await addToCart(item.productId, -1);
+                      await addToCart(cartId, item.productId, -1);
                       refetch();
                     }
                   }
@@ -75,7 +76,7 @@ export default function Cart() {
                 </button>
                 <button
                   onClick={async() => {
-                    await addToCart(item.productId, 1);
+                    await addToCart(cartId, item.productId, 1);
                     refetch();
                   }}
                   className="ml-4 px-2 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-full text-xs"

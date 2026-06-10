@@ -14,7 +14,8 @@ export default function Product({ product, showAddToCartButton  }) {
   }
 
   function handleAddToCart() {
-    addToCart(product, 1) //network call
+    const cartId = "6a25e4c6545a85eee5159a5b"; // Replace with actual cart ID
+    addToCart(cartId, product, 1) //network call
       .then(() => {
         navigate("/cart", { state: { message: `Product ${product.title} added to cart successfully!` } });
       })

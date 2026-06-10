@@ -1,36 +1,33 @@
 import axios from "axios";
+ const api = axios.create({ baseURL: import.meta.env.VITE_API_BASE_URL });
 
 export function fetchProducts() {
-  //await new Promise((resolve) => setTimeout(resolve, 500));
-
-  return "http://localhost:5000/api/products/";
+  return `${api.defaults.baseURL}/products/`;
 }
 
 export function getProduct(id) {
-  return `http://localhost:5000/api/products/${id}`;
+  return `${api.defaults.baseURL}/products/${id}`;
 }
 
 export async function postProduct(productData) {
-  const response = await axios.post(
-    "http://localhost:5000/api/products/",
+  const response = await api.post(
+    `/products/`,
     productData,
   );
   return response.data._id;
 }
 
 export function searchProductsByQuery(query) {
-  (resolve) => setTimeout(resolve, 500);
-
-  return `http://localhost:5000/api/products/search?query=${encodeURIComponent(query)}`;
+  return `${api.defaults.baseURL}/products/search?query=${encodeURIComponent(query)}`;
 }
 
-export function getCart() {
-  return "http://localhost:5000/api/carts/6a25e4c6545a85eee5159a5b";
+export function getCart(cartId) {
+  return `${api.defaults.baseURL}/carts/${cartId}`;
 }
 
-export async function addToCart(productId, quantity) {
-  const response = await axios.put(
-    `http://localhost:5000/api/carts/add/6a25e4c6545a85eee5159a5b`,
+export async function addToCart(cartId, productId, quantity) {
+  const response = await api.put(
+    `/carts/add/${cartId}`,
     {
       productId: productId._id,
       quantity,
