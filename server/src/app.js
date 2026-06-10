@@ -11,9 +11,9 @@ app.use(express.json());
 app.use('/api/products', ProductRouts);
 app.use('/api/carts', CartRoutes);
 
-// app.get('/api/health', (req, res) => {
-//   res.status(200).json({ status: "ok" });
-// });
+app.get('/api/health', (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
 
 app.use(errorHandler);
 export default app;
