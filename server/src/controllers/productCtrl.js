@@ -106,7 +106,7 @@ async function remove(req, res, next) {
   }
 }
 
-async function searchbyText(req, res, next) {
+async function searchProductsByTitle(req, res, next) {
   try {
     const { query } = req.query;
 
@@ -126,5 +126,5 @@ export default {
   create,
   update,
   remove,
-  searchbyText,
+  searchProductsByTitle,
 };
